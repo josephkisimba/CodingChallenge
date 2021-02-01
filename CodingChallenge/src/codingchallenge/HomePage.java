@@ -56,6 +56,8 @@ public class HomePage extends javax.swing.JFrame {
         emailTextField = new javax.swing.JTextField();
         occComboBox = new javax.swing.JComboBox<>();
         statComboBox = new javax.swing.JComboBox<>();
+        newButton = new javax.swing.JButton();
+        updateButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -97,6 +99,20 @@ public class HomePage extends javax.swing.JFrame {
 
         statComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "SINGLE", "MARIED", "DIVORCED" }));
 
+        newButton.setText("NEW");
+        newButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                newButtonActionPerformed(evt);
+            }
+        });
+
+        updateButton.setText("UPDATE");
+        updateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -114,7 +130,7 @@ public class HomePage extends javax.swing.JFrame {
                             .addComponent(emailLabel)
                             .addComponent(occLabel)
                             .addComponent(statLabel))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 184, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(regTextField)
@@ -131,7 +147,11 @@ public class HomePage extends javax.swing.JFrame {
                                 .addComponent(phoneTextField, javax.swing.GroupLayout.Alignment.LEADING))))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(addButton)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(45, 45, 45)
+                        .addComponent(newButton)
+                        .addGap(48, 48, 48)
+                        .addComponent(updateButton)
+                        .addGap(0, 108, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -173,7 +193,10 @@ public class HomePage extends javax.swing.JFrame {
                     .addComponent(statLabel)
                     .addComponent(statComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
-                .addComponent(addButton)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(addButton)
+                    .addComponent(newButton)
+                    .addComponent(updateButton))
                 .addContainerGap())
         );
 
@@ -227,6 +250,81 @@ public class HomePage extends javax.swing.JFrame {
         
     }//GEN-LAST:event_addButtonActionPerformed
 
+    private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
+        
+        regTextField.setText("");
+        nameTextField.setText("");
+        surnameTextField.setText("");
+        buttonGroup1.clearSelection();
+        phoneTextField.setText("");
+        emailTextField.setText("");
+        occComboBox.setSelectedIndex(0);
+        statComboBox.setSelectedIndex(0);
+        
+        
+    }//GEN-LAST:event_newButtonActionPerformed
+
+    private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
+       
+        try {
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user?useSS=false","root","Adolphhk07");
+            
+            String sql= "update userinfo set name=?,surname=?, gender=?, phoneNo=?, email=?, occupation=?, status=? where registNo=? ;";
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setInt(1, Integer.parseInt(regTextField.getText()) );
+            pst.setString(2, nameTextField.getText());
+            pst.setString(3,surnameTextField.getText() );
+            if(maleRadioButton.isSelected()){
+               
+               gender = "MALE";
+           }
+           else if (femaleRadioButton.isSelected()){
+               
+               gender = "FEMALE";
+               
+           }
+            
+          pst.setString(4,gender ); 
+          pst.setInt(5, Integer.parseInt(phoneTextField.getText()) );
+          pst.setString(6,emailTextField.getText());
+          
+          occ = occComboBox.getSelectedItem().toString();
+          pst.setString(7,occ);
+          stat = statComboBox.getSelectedItem().toString();
+          pst.setString(8,stat);
+          
+          
+          
+          pst.executeUpdate();
+          JOptionPane.showMessageDialog(this,"Updated Succesfully");
+           con.close(); 
+           
+        } catch (SQLException ex) {
+            Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }                                            
+
+    private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {                                             
+        
+        try {
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user?useSS=false","root","Adolphhk07");
+            String sql= "delete from userinfo where registNo=? ;";
+            PreparedStatement pst = con.prepareStatement(sql);
+            
+            pst.setInt(1, Integer.parseInt(regTextField.getText()) );
+            
+            pst.executeUpdate();
+          JOptionPane.showMessageDialog(this,"Deleted Succesfully");
+           con.close(); 
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        
+    }//GEN-LAST:event_updateButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -272,6 +370,7 @@ public class HomePage extends javax.swing.JFrame {
     private javax.swing.JRadioButton maleRadioButton;
     private javax.swing.JLabel nameLabel;
     private javax.swing.JTextField nameTextField;
+    private javax.swing.JButton newButton;
     private javax.swing.JComboBox<String> occComboBox;
     private javax.swing.JLabel occLabel;
     private javax.swing.JLabel phoneLabel;
@@ -282,5 +381,6 @@ public class HomePage extends javax.swing.JFrame {
     private javax.swing.JLabel statLabel;
     private javax.swing.JLabel surnameLabel;
     private javax.swing.JTextField surnameTextField;
+    private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
 }
