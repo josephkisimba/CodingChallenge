@@ -271,9 +271,9 @@ public class HomePage extends javax.swing.JFrame {
             
             String sql= "update userinfo set name=?,surname=?, gender=?, phoneNo=?, email=?, occupation=?, status=? where registNo=? ;";
             PreparedStatement pst = con.prepareStatement(sql);
-            pst.setInt(1, Integer.parseInt(regTextField.getText()) );
-            pst.setString(2, nameTextField.getText());
-            pst.setString(3,surnameTextField.getText() );
+            
+            pst.setString(1, nameTextField.getText());
+            pst.setString(2,surnameTextField.getText() );
             if(maleRadioButton.isSelected()){
                
                gender = "MALE";
@@ -284,15 +284,15 @@ public class HomePage extends javax.swing.JFrame {
                
            }
             
-          pst.setString(4,gender ); 
-          pst.setInt(5, Integer.parseInt(phoneTextField.getText()) );
-          pst.setString(6,emailTextField.getText());
+          pst.setString(3,gender ); 
+          pst.setInt(4, Integer.parseInt(phoneTextField.getText()) );
+          pst.setString(5,emailTextField.getText());
           
           occ = occComboBox.getSelectedItem().toString();
-          pst.setString(7,occ);
+          pst.setString(6,occ);
           stat = statComboBox.getSelectedItem().toString();
-          pst.setString(8,stat);
-          
+          pst.setString(7,stat);
+          pst.setInt(8, Integer.parseInt(regTextField.getText()) );
           
           
           pst.executeUpdate();
