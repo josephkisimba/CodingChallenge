@@ -18,9 +18,11 @@ import javax.swing.JOptionPane;
  * @author for sale pc
  */
 public class HomePage extends javax.swing.JFrame {
-    String gender;
-    String occ;
-    String stat;
+    
+    //vairable declaration
+    String gender;//used for radiobutton
+    String occ;//use for combobox
+    String stat;//used for combox
     /**
      * Creates new form HomePage
      */
@@ -78,6 +80,8 @@ public class HomePage extends javax.swing.JFrame {
         occLabel.setText("Occupation");
 
         statLabel.setText("Status");
+
+        regTextField.setToolTipText("");
 
         buttonGroup1.add(maleRadioButton);
         maleRadioButton.setText("MALE");
@@ -211,15 +215,42 @@ public class HomePage extends javax.swing.JFrame {
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
        
-         try {
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user?useSS=false","root","Adolphhk07");
-            
-            String sql ="insert into userinfo(registNo, name, surname, gender, phoneNo, email, occupation, status) values (?,?,?,?,?,?,?,?);";
+        String regis = regTextField.getText();
+        String name1 = nameTextField.getText();
+        String surname1 = nameTextField.getText();
+        String phone = phoneTextField.getText();
+        String mail = emailTextField.getText();
+        
+        
+        try {
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user?useSS=false", "root", "Adolphhk07");
+
+            String sql = "insert into userinfo(registNo, name, surname, gender, phoneNo, email, occupation, status) values (?,?,?,?,?,?,?,?);";
             PreparedStatement pst = con.prepareStatement(sql);
+
+            if (regis.matches("[1-2]\\d{6}")) {
+
+                pst.setInt(1, Integer.parseInt(regTextField.getText()));
+
+            } else {
+                JOptionPane.showMessageDialog(null, "All registration numbers must be 7 digits and start with a 1 or 2");
+            }
+
+            if (name1.matches("[A-Z][a-zA-Z]*")) {
+
+                pst.setString(2, nameTextField.getText());
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Incorrect format on Name");
+            }
+            if (surname1.matches("[A-Z][a-zA-Z]*")) {
+
+              pst.setString(3, surnameTextField.getText());
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Incorrect format on Surname");
+            }
             
-           pst.setInt(1, Integer.parseInt(regTextField.getText()) );
-           pst.setString(2,nameTextField.getText() );
-           pst.setString(3,surnameTextField.getText() );
            
            if(maleRadioButton.isSelected()){
                
@@ -232,8 +263,24 @@ public class HomePage extends javax.swing.JFrame {
            }
             
           pst.setString(4,gender ); 
-          pst.setInt(5, Integer.parseInt(phoneTextField.getText()) );
-          pst.setString(6,emailTextField.getText());
+          
+           if (phone.matches("[0]\\d{9}")) {
+                 
+                 pst.setInt(5, Integer.parseInt(phoneTextField.getText()) );
+
+             } else {
+                 JOptionPane.showMessageDialog(null, "Number must be 10 digit and start with 0 ");
+             }
+          
+          
+             if (mail.matches("^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$")) {
+                 
+                 pst.setString(6, emailTextField.getText());
+
+             } else {
+                 JOptionPane.showMessageDialog(null, "Enter the Correct format of email!! eg. jkm@gmail.com or 1234@jk.za.az");
+             }
+          
           
           occ = occComboBox.getSelectedItem().toString();
           pst.setString(7,occ);
@@ -245,8 +292,9 @@ public class HomePage extends javax.swing.JFrame {
           con.close();
             
             
-        } catch (SQLException ex) {
-            Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
+        } catch(Exception e){
+            
+            JOptionPane.showMessageDialog(null, e);
         }
         
         
