@@ -214,20 +214,20 @@ public class HomePage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
-       
+       //-------------Declare variable use for REGEX-----------------------
         String regis = regTextField.getText();
         String name1 = nameTextField.getText();
         String surname1 = nameTextField.getText();
         String phone = phoneTextField.getText();
         String mail = emailTextField.getText();
-        
+      //---------------------------------------------------------------- 
         
         try {
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user?useSS=false", "root", "Adolphhk07");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user?useSS=false", "root", "Adolphhk07");//Establish the connection the DB
 
-            String sql = "insert into userinfo(registNo, name, surname, gender, phoneNo, email, occupation, status) values (?,?,?,?,?,?,?,?);";
-            PreparedStatement pst = con.prepareStatement(sql);
-
+            String sql = "insert into userinfo(registNo, name, surname, gender, phoneNo, email, occupation, status) values (?,?,?,?,?,?,?,?);";//Creating the sql commande
+            PreparedStatement pst = con.prepareStatement(sql);//statement
+      //----------------REGEX condition  and Taking parameter from the textfield----------------------------------------      
             if (regis.matches("[1-2]\\d{6}")) {
 
                 pst.setInt(1, Integer.parseInt(regTextField.getText()));
@@ -250,8 +250,10 @@ public class HomePage extends javax.swing.JFrame {
             } else {
                 JOptionPane.showMessageDialog(null, "Incorrect format on Surname");
             }
-            
-           
+         //---------------------------------------------------------------------------
+         
+         
+          //--------Taking selection from radiobutton------------------- 
            if(maleRadioButton.isSelected()){
                
                gender = "MALE";
@@ -263,7 +265,7 @@ public class HomePage extends javax.swing.JFrame {
            }
             
           pst.setString(4,gender ); 
-          
+        //--------------------------------------------------------------------------------------  
            if (phone.matches("[0]\\d{9}")) {
                  
                  pst.setInt(5, Integer.parseInt(phoneTextField.getText()) );
@@ -281,10 +283,10 @@ public class HomePage extends javax.swing.JFrame {
                  JOptionPane.showMessageDialog(null, "Enter the Correct format of email!! eg. jkm@gmail.com or 1234@jk.za.az");
              }
           
-          
-          occ = occComboBox.getSelectedItem().toString();
+         //-----COMBOBOX selection-------------------------------- 
+          occ = occComboBox.getSelectedItem().toString();//converting the selected iemto toString
           pst.setString(7,occ);
-          stat = statComboBox.getSelectedItem().toString();
+          stat = statComboBox.getSelectedItem().toString();//converting the selected iemto toString
           pst.setString(8,stat);
           
           pst.executeUpdate();
@@ -300,9 +302,11 @@ public class HomePage extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_addButtonActionPerformed
-
+      //end  addButtonActionPerformed
+    
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
-        
+      
+        //-----------Emptying the textfield-----------
         regTextField.setText("");
         nameTextField.setText("");
         surnameTextField.setText("");
@@ -311,16 +315,19 @@ public class HomePage extends javax.swing.JFrame {
         emailTextField.setText("");
         occComboBox.setSelectedIndex(0);
         statComboBox.setSelectedIndex(0);
+        
+        //----------------------------------------
     }//GEN-LAST:event_newButtonActionPerformed
-
+         //end newButtonActionPerformed
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
         
         try {
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user?useSS=false","root","Adolphhk07");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user?useSS=false","root","Adolphhk07");//Establish the connection the DB
             
-            String sql= "update userinfo set name=?,surname=?, gender=?, phoneNo=?, email=?, occupation=?, status=? where registNo=? ;";
-            PreparedStatement pst = con.prepareStatement(sql);
+            String sql= "update userinfo set name=?,surname=?, gender=?, phoneNo=?, email=?, occupation=?, status=? where registNo=? ;";//Creating the update sql commande
+            PreparedStatement pst = con.prepareStatement(sql);//statement
             
+            //----------Taking parameter from the textfield, combobox and radiobutton---------------
             pst.setString(1, nameTextField.getText());
             pst.setString(2,surnameTextField.getText() );
             if(maleRadioButton.isSelected()){
@@ -342,7 +349,7 @@ public class HomePage extends javax.swing.JFrame {
           stat = statComboBox.getSelectedItem().toString();
           pst.setString(7,stat);
           pst.setInt(8, Integer.parseInt(regTextField.getText()) );
-          
+        //------------------------------------------------------------------  
           
           pst.executeUpdate();
           JOptionPane.showMessageDialog(this,"Updated Succesfully");
@@ -354,7 +361,8 @@ public class HomePage extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_updateButtonActionPerformed
-
+            //end updateButtonActionPerformed
+    
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
     
         try {

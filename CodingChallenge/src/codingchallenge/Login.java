@@ -99,6 +99,8 @@ public class Login extends javax.swing.JFrame {
          try {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/admin?useSS=false","root","Adolphhk07"); //connecting to the DB
             
+            
+            
             String sql ="select * from admindetails where username=? and password=?";//creating the sql commmande
             
             PreparedStatement pst = con.prepareStatement(sql);//prepare statement
