@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package codingchallenge;
 
 import java.sql.Connection;
@@ -21,7 +17,7 @@ import javax.swing.JOptionPane;
 public class Login extends javax.swing.JFrame {
 
     /**
-     * Creates new form Login
+     *
      */
     public Login() {
         initComponents();
@@ -125,7 +121,7 @@ public class Login extends javax.swing.JFrame {
              passwordField.setText("");//emptying the textfield
              
              con.close();// closing the connexion
-                
+                  
             }//end else
             
         }//end try
