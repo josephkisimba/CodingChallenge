@@ -147,10 +147,15 @@ public class HomePage extends javax.swing.JFrame {
 
         statLabel.setText("Status");
 
-        regTextField.setToolTipText("");
+        regTextField.setToolTipText("RegNo must be 7 digits and start with 1 or 2");
+
+        nameTextField.setToolTipText("Name start with a capital letter");
+
+        surnameTextField.setToolTipText("suranme start with a capital letter");
 
         buttonGroup1.add(maleRadioButton);
         maleRadioButton.setText("MALE");
+        maleRadioButton.setToolTipText("");
         maleRadioButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 maleRadioButtonActionPerformed(evt);
@@ -159,6 +164,10 @@ public class HomePage extends javax.swing.JFrame {
 
         buttonGroup1.add(femaleRadioButton);
         femaleRadioButton.setText("FEMALE");
+
+        phoneTextField.setToolTipText("PhoneNo must be 10 digit and start with 0");
+
+        emailTextField.setToolTipText("eg jkm@gm.ac or 12345@qerty.az.ca");
 
         occComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "STUDENT", "EMPLOYED", "UN-EMPLOYED", "RETIRED" }));
 
@@ -208,44 +217,39 @@ public class HomePage extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(phoneLabel)
+                    .addComponent(emailLabel)
+                    .addComponent(occLabel)
+                    .addComponent(statLabel)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(phoneLabel)
-                            .addComponent(emailLabel)
-                            .addComponent(occLabel)
-                            .addComponent(statLabel)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(addButton)
-                                .addGap(33, 33, 33)
-                                .addComponent(newButton))
-                            .addComponent(nameLabel)
-                            .addComponent(surnameLabel)
-                            .addComponent(genderLabel))
-                        .addGap(62, 62, 62)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(updateButton)
-                                .addGap(31, 31, 31)
-                                .addComponent(deleteButton))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(nameTextField, javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(maleRadioButton)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(femaleRadioButton))
-                                    .addComponent(surnameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
-                                    .addComponent(emailTextField)
-                                    .addComponent(phoneTextField, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(occComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(statComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                        .addComponent(addButton)
+                        .addGap(33, 33, 33)
+                        .addComponent(newButton))
+                    .addComponent(nameLabel)
+                    .addComponent(surnameLabel)
+                    .addComponent(genderLabel)
+                    .addComponent(regLabel))
+                .addGap(62, 62, 62)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(regLabel)
+                        .addComponent(updateButton)
+                        .addGap(31, 31, 31)
+                        .addComponent(deleteButton)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(regTextField)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(maleRadioButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(regTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE))
+                        .addComponent(femaleRadioButton))
+                    .addComponent(emailTextField)
+                    .addComponent(phoneTextField, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(occComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(statComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(surnameTextField)
+                    .addComponent(nameTextField))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 518, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -545,6 +549,15 @@ public class HomePage extends javax.swing.JFrame {
                 DefaultTableModel mdel = (DefaultTableModel) dbTable.getModel();//getting table model
                 mdel.setRowCount(0);//emptying the rows in the table
                 show_user();//calling the show user again after emptying the table
+                regTextField.setText("");
+                nameTextField.setText("");
+                surnameTextField.setText("");
+                buttonGroup1.clearSelection();
+                phoneTextField.setText("");
+                emailTextField.setText("");
+                occComboBox.setSelectedIndex(0);
+                statComboBox.setSelectedIndex(0);
+
             }//end if
             else {
                 JOptionPane.showMessageDialog(this, "This registration number does not exist");//error message

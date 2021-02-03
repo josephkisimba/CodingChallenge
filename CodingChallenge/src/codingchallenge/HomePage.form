@@ -56,54 +56,44 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="phoneLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="emailLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="occLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="statLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="addButton" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
-                              <Component id="newButton" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="nameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="surnameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="genderLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="62" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Group type="102" attributes="0">
-                              <Component id="updateButton" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
-                              <Component id="deleteButton" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="nameTextField" alignment="1" max="32767" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Group type="102" attributes="0">
-                                      <Component id="maleRadioButton" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace max="32767" attributes="0"/>
-                                      <Component id="femaleRadioButton" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="surnameTextField" alignment="0" pref="169" max="32767" attributes="0"/>
-                                  <Component id="emailTextField" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="phoneTextField" alignment="1" max="32767" attributes="0"/>
-                                  <Component id="occComboBox" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="statComboBox" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                      </Group>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="phoneLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="emailLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="occLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="statLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="addButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
+                      <Component id="newButton" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" attributes="0">
-                      <Component id="regLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
-                      <Component id="regTextField" min="-2" pref="171" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="nameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="surnameLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="genderLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="regLabel" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="jScrollPane3" pref="502" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="62" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Component id="updateButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                      <Component id="deleteButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  </Group>
+                  <Component id="regTextField" alignment="0" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="maleRadioButton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="femaleRadioButton" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Component id="emailTextField" alignment="0" max="32767" attributes="0"/>
+                  <Component id="phoneTextField" alignment="1" max="32767" attributes="0"/>
+                  <Component id="occComboBox" alignment="0" max="32767" attributes="0"/>
+                  <Component id="statComboBox" alignment="0" max="32767" attributes="0"/>
+                  <Component id="surnameTextField" alignment="0" max="32767" attributes="0"/>
+                  <Component id="nameTextField" alignment="0" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jScrollPane3" min="-2" pref="518" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -211,12 +201,18 @@
     </Component>
     <Component class="javax.swing.JTextField" name="regTextField">
       <Properties>
-        <Property name="toolTipText" type="java.lang.String" value=""/>
+        <Property name="toolTipText" type="java.lang.String" value="RegNo must be 7 digits and start with 1 or 2"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="nameTextField">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value="Name start with a capital letter"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="surnameTextField">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value="suranme start with a capital letter"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JRadioButton" name="maleRadioButton">
       <Properties>
@@ -224,6 +220,7 @@
           <ComponentRef name="buttonGroup1"/>
         </Property>
         <Property name="text" type="java.lang.String" value="MALE"/>
+        <Property name="toolTipText" type="java.lang.String" value=""/>
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="maleRadioButtonActionPerformed"/>
@@ -238,8 +235,14 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="phoneTextField">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value="PhoneNo must be 10 digit and start with 0"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="emailTextField">
+      <Properties>
+        <Property name="toolTipText" type="java.lang.String" value="eg jkm@gm.ac or 12345@qerty.az.ca"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JComboBox" name="occComboBox">
       <Properties>
