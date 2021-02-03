@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -29,24 +30,27 @@ public class HomePage extends javax.swing.JFrame {
      */
     public HomePage() {
         initComponents();
+        show_user();//calling the show user to show data in the table
     }
+    //-------------Creating the Arraylist ---------------------------------
     public ArrayList<User>userList(){
         
         ArrayList<User> userList = new ArrayList<>();
         try {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user?useSS=false", "root", "Adolphhk07");//Establish the connection the DB  
             
-            String sql = "select * from userinfo";
+            String sql = "select * from userinfo";// ceating sql command to select data
             
-            Statement stm  = con.createStatement();
-            ResultSet rst = stm.executeQuery(sql);
+            Statement stm  = con.createStatement();//creating the stament
+            ResultSet rst = stm.executeQuery(sql);//executing the stmt
             
             User user;
+            //-------creating the while loop  ---------------
             while(rst.next()){
-                user = new User(rst.getInt("registNo"),  rst.getString("name"), rst.getString("surname"),rst.getString("gender"), rst.getInt("phoneNo"),rst.getString("email"), rst.getString("occupation"), rst.getString("status"));
-                userList.add(user);
+                user = new User(rst.getInt("registNo"),  rst.getString("name"), rst.getString("surname"),rst.getString("gender"), rst.getInt("phoneNo"),rst.getString("email"), rst.getString("occupation"), rst.getString("status"));//parametrs of the table
+                userList.add(user);//adding user to the user list
                 
-            }
+            }//end while
             
             
         } catch (SQLException ex) {
@@ -58,15 +62,32 @@ public class HomePage extends javax.swing.JFrame {
         return userList;
         
         
-    }
+    }//end ArrayList
     
+    //---------showing user in the table---------------
     public void show_user(){
         
         ArrayList<User> list = userList();
-       // DefaultTableModel
+       DefaultTableModel model = (DefaultTableModel)dbTable.getModel();
+       Object[] row = new Object[8];
+       //-------for statement -------------------
+       for(int i=0; i<list.size(); i++){
+          
+           //-------Adding each data to his row----------
+           row[0] = list.get(i).getReg();
+           row[1] = list.get(i).getName();
+           row[2] = list.get(i).getSurname();
+           row[3] = list.get(i).getGender();
+           row[4] = list.get(i).getPhone();
+           row[5] = list.get(i).getEmail();
+           row[6] = list.get(i).getOccu();
+           row[7] = list.get(i).getStatus();
+           model.addRow(row);
+           
+       }//end for
         
         
-    }
+    }// end show_user
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -97,6 +118,8 @@ public class HomePage extends javax.swing.JFrame {
         newButton = new javax.swing.JButton();
         updateButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        dbTable = new javax.swing.JTable();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -174,6 +197,16 @@ public class HomePage extends javax.swing.JFrame {
             }
         });
 
+        dbTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "registNo", "name", "surname", "gender", "phoneNo", "email", "occupation", "status"
+            }
+        ));
+        jScrollPane3.setViewportView(dbTable);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -211,13 +244,14 @@ public class HomePage extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(75, 75, 75)
                                 .addComponent(updateButton)
-                                .addGap(50, 50, 50)
+                                .addGap(18, 18, 18)
                                 .addComponent(deleteButton))))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(regLabel)
                         .addGap(171, 171, 171)
                         .addComponent(regTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(473, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -226,7 +260,7 @@ public class HomePage extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(regLabel)
                     .addComponent(regTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(nameLabel)
                     .addComponent(nameTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -255,7 +289,7 @@ public class HomePage extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(statLabel)
                     .addComponent(statComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(addButton)
@@ -264,6 +298,7 @@ public class HomePage extends javax.swing.JFrame {
                         .addComponent(updateButton)
                         .addComponent(deleteButton)))
                 .addContainerGap())
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
         );
 
         pack();
@@ -346,6 +381,17 @@ public class HomePage extends javax.swing.JFrame {
           pst.setString(8,stat);
           
           pst.executeUpdate();
+         regTextField.setText("");
+        nameTextField.setText("");
+        surnameTextField.setText("");
+        buttonGroup1.clearSelection();
+        phoneTextField.setText("");
+        emailTextField.setText("");
+        occComboBox.setSelectedIndex(0);
+        statComboBox.setSelectedIndex(0);
+          DefaultTableModel mdel = (DefaultTableModel)dbTable.getModel();
+          mdel.setRowCount(0);//emptying the rows in the table
+          show_user();//calling the show user again after emptying the table
           JOptionPane.showMessageDialog(this,"Insertion Succesfully");
           con.close();
             
@@ -486,12 +532,14 @@ public class HomePage extends javax.swing.JFrame {
     private javax.swing.JButton addButton;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
+    private javax.swing.JTable dbTable;
     private javax.swing.JButton deleteButton;
     private javax.swing.JLabel emailLabel;
     private javax.swing.JTextField emailTextField;
     private javax.swing.JRadioButton femaleRadioButton;
     private javax.swing.JLabel genderLabel;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTable jTable1;
     private javax.swing.JRadioButton maleRadioButton;
