@@ -1,10 +1,14 @@
 
 package codingchallenge;
 
+import static java.lang.System.out;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -20,17 +24,58 @@ public class HomePage extends javax.swing.JFrame {
     String occ;//use for combobox
     String stat;//used for combox
     
+    /**
+     *
+     */
     public HomePage() {
         initComponents();
     }
-
-   
+    public ArrayList<User>userList(){
+        
+        ArrayList<User> userList = new ArrayList<>();
+        try {
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user?useSS=false", "root", "Adolphhk07");//Establish the connection the DB  
+            
+            String sql = "select * from userinfo";
+            
+            Statement stm  = con.createStatement();
+            ResultSet rst = stm.executeQuery(sql);
+            
+            User user;
+            while(rst.next()){
+                user = new User(rst.getInt("registNo"),  rst.getString("name"), rst.getString("surname"),rst.getString("gender"), rst.getInt("phoneNo"),rst.getString("email"), rst.getString("occupation"), rst.getString("status"));
+                userList.add(user);
+                
+            }
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        
+        return userList;
+        
+        
+    }
+    
+    public void show_user(){
+        
+        ArrayList<User> list = userList();
+       // DefaultTableModel
+        
+        
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         buttonGroup2 = new javax.swing.ButtonGroup();
+        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
         regLabel = new javax.swing.JLabel();
         nameLabel = new javax.swing.JLabel();
         surnameLabel = new javax.swing.JLabel();
@@ -52,6 +97,19 @@ public class HomePage extends javax.swing.JFrame {
         newButton = new javax.swing.JButton();
         updateButton = new javax.swing.JButton();
         deleteButton = new javax.swing.JButton();
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTable1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -75,6 +133,11 @@ public class HomePage extends javax.swing.JFrame {
 
         buttonGroup1.add(maleRadioButton);
         maleRadioButton.setText("MALE");
+        maleRadioButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                maleRadioButtonActionPerformed(evt);
+            }
+        });
 
         buttonGroup1.add(femaleRadioButton);
         femaleRadioButton.setText("FEMALE");
@@ -118,42 +181,43 @@ public class HomePage extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(regLabel)
-                    .addComponent(nameLabel)
-                    .addComponent(surnameLabel)
-                    .addComponent(genderLabel)
-                    .addComponent(phoneLabel)
-                    .addComponent(emailLabel)
-                    .addComponent(occLabel)
-                    .addComponent(statLabel)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(addButton)
-                        .addGap(33, 33, 33)
-                        .addComponent(newButton)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(regTextField)
-                                .addComponent(nameTextField)
-                                .addComponent(surnameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(deleteButton)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(phoneLabel)
+                            .addComponent(emailLabel)
+                            .addComponent(occLabel)
+                            .addComponent(statLabel)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(addButton)
+                                .addGap(33, 33, 33)
+                                .addComponent(newButton))
+                            .addComponent(nameLabel)
+                            .addComponent(surnameLabel)
+                            .addComponent(genderLabel))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(62, 62, 62)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(layout.createSequentialGroup()
                                         .addComponent(maleRadioButton)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(femaleRadioButton))
-                                    .addComponent(statComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(occComboBox, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(emailTextField, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(phoneTextField, javax.swing.GroupLayout.Alignment.LEADING))))
-                        .addContainerGap())
+                                    .addComponent(surnameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
+                                    .addComponent(nameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
+                                    .addComponent(emailTextField)
+                                    .addComponent(phoneTextField, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(occComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(statComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(75, 75, 75)
+                                .addComponent(updateButton)
+                                .addGap(50, 50, 50)
+                                .addComponent(deleteButton))))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(updateButton)
-                        .addContainerGap(128, Short.MAX_VALUE))))
+                        .addComponent(regLabel)
+                        .addGap(171, 171, 171)
+                        .addComponent(regTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(473, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -173,8 +237,8 @@ public class HomePage extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(genderLabel)
-                    .addComponent(maleRadioButton)
-                    .addComponent(femaleRadioButton))
+                    .addComponent(femaleRadioButton)
+                    .addComponent(maleRadioButton))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(phoneLabel)
@@ -192,11 +256,13 @@ public class HomePage extends javax.swing.JFrame {
                     .addComponent(statLabel)
                     .addComponent(statComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(addButton)
-                    .addComponent(newButton)
-                    .addComponent(updateButton)
-                    .addComponent(deleteButton))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(addButton)
+                        .addComponent(newButton))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(updateButton)
+                        .addComponent(deleteButton)))
                 .addContainerGap())
         );
 
@@ -309,6 +375,10 @@ public class HomePage extends javax.swing.JFrame {
         //----------------------------------------
     }//GEN-LAST:event_newButtonActionPerformed
          //end newButtonActionPerformed
+    /**
+     * 
+     * @param evt 
+     */
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
         
         try {
@@ -356,13 +426,13 @@ public class HomePage extends javax.swing.JFrame {
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
     
         try {
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user?useSS=false","root","Adolphhk07");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user?useSS=false","root","Adolphhk07");//creating the connection to the DB
             
-            String sql = "delete from userinfo where registNo=? ;";
-            PreparedStatement pst = con.prepareStatement(sql);
+            String sql = "delete from userinfo where registNo=? ;";//creating the delete sql command
+            PreparedStatement pst = con.prepareStatement(sql);//statement
             
-            pst.setString(1, nameTextField.getText());
-            pst.executeUpdate();
+            pst.setString(1, nameTextField.getText());//taking parameters from the registeer No textfield
+            pst.executeUpdate();//execute the update
           JOptionPane.showMessageDialog(this,"Deleted Succesfully");
           con.close();   
         } catch (SQLException ex) {
@@ -372,6 +442,10 @@ public class HomePage extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_deleteButtonActionPerformed
+
+    private void maleRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maleRadioButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_maleRadioButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -417,6 +491,9 @@ public class HomePage extends javax.swing.JFrame {
     private javax.swing.JTextField emailTextField;
     private javax.swing.JRadioButton femaleRadioButton;
     private javax.swing.JLabel genderLabel;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable jTable1;
     private javax.swing.JRadioButton maleRadioButton;
     private javax.swing.JLabel nameLabel;
     private javax.swing.JTextField nameTextField;
