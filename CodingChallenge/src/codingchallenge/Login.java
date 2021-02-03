@@ -1,4 +1,3 @@
-
 package codingchallenge;
 
 import java.sql.Connection;
@@ -91,49 +90,46 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
-        
-         try {
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/admin?useSS=false","root","Adolphhk07"); //connecting to the DB
-            
-            
-            
-            String sql ="select * from admindetails where username=? and password=?";//creating the sql commmande
-            
+
+        try {
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/admin?useSS=false", "root", "Adolphhk07"); //connecting to the DB
+
+            String sql = "select * from admindetails where username=? and password=?";//creating the sql commmande
+
             PreparedStatement pst = con.prepareStatement(sql);//prepare statement
-            
-            pst.setString(1,usernameTextField.getText());//taking parameters from the textfield
-            pst.setString(2,passwordField.getText());//taking parameters from the textfield
-            
+
+            pst.setString(1, usernameTextField.getText());//taking parameters from the textfield
+            pst.setString(2, passwordField.getText());//taking parameters from the textfield
+
             ResultSet rst = pst.executeQuery();// resultset to execute the query
-            
-         //-------------Start conditon--------------------------------------   
-            if(rst.next()){
+
+            //-------------Start conditon--------------------------------------   
+            if (rst.next()) {
                 JOptionPane.showMessageDialog(this, "WELCOME");
-                
+
                 dispose();
                 HomePage home = new HomePage();//Calling the homepage jframe 
                 home.show();//showing the hompage jframe
             }//end if statement
-            else{
-             JOptionPane.showMessageDialog(this, "USERNAME OR PASSWORD NOT CORRECT"); //Showing the message
-             
-             usernameTextField.setText("");//emptying the textfield
-             passwordField.setText("");//emptying the textfield
-             
-             con.close();// closing the connexion
-                  
+            else {
+                JOptionPane.showMessageDialog(this, "USERNAME OR PASSWORD NOT CORRECT"); //Showing the message
+
+                usernameTextField.setText("");//emptying the textfield
+                passwordField.setText("");//emptying the textfield
+
+                con.close();// closing the connexion
+
             }//end else
-            
+
         }//end try
-         catch (SQLException ex) {
+        catch (SQLException ex) {
             Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }//end catch
-        
-        
-        
+
+
     }//GEN-LAST:event_loginButtonActionPerformed
-        //loginButtonActionPerformed
-    
+    //loginButtonActionPerformed
+
     /**
      * @param args the command line arguments
      */

@@ -1,6 +1,5 @@
 package codingchallenge;
 
-import static java.lang.System.out;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -65,7 +64,7 @@ public class HomePage extends javax.swing.JFrame {
 
         ArrayList<User> list = userList();
         DefaultTableModel model = (DefaultTableModel) dbTable.getModel();
-        Object[] row = new Object[8];
+        Object[] row = new Object[8];//setting the size
         //-------for statement -------------------
         for (int i = 0; i < list.size(); i++) {
 
@@ -310,91 +309,87 @@ public class HomePage extends javax.swing.JFrame {
 
         try {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user?useSS=false", "root", "Adolphhk07");//Establish the connection the DB
-            
-            String sql1 ="select * from userinfo where registNo=?";
-            
+            //---------Creating the condition before executing the insert command---------------
+            String sql1 = "select * from userinfo where registNo=?";
+
             PreparedStatement pst1 = con.prepareStatement(sql1);
             pst1.setInt(1, Integer.parseInt(regTextField.getText()));//taking parameters from the registeer No textfield
             ResultSet rst = pst1.executeQuery();
-            
-            if(!rst.next()){
-            String sql = "insert into userinfo(registNo, name, surname, gender, phoneNo, email, occupation, status) values (?,?,?,?,?,?,?,?);";//Creating the sql commande
-            PreparedStatement pst = con.prepareStatement(sql);//statement
-            //----------------REGEX condition  and Taking parameter from the textfield----------------------------------------      
-            if (regis.matches("[1-2]\\d{6}")) {
 
-                pst.setInt(1, Integer.parseInt(regTextField.getText()));
+            if (!rst.next()) {
+                String sql = "insert into userinfo(registNo, name, surname, gender, phoneNo, email, occupation, status) values (?,?,?,?,?,?,?,?);";//Creating the sql commande
+                PreparedStatement pst = con.prepareStatement(sql);//statement
+                //----------------REGEX condition  and Taking parameter from the textfield----------------------------------------      
+                if (regis.matches("[1-2]\\d{6}")) {
+
+                    pst.setInt(1, Integer.parseInt(regTextField.getText()));
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "All registration numbers must be 7 digits and start with a 1 or 2");
+                }
+
+                if (name1.matches("[A-Z][a-zA-Z]*")) {
+
+                    pst.setString(2, nameTextField.getText());
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Incorrect format on Name");
+                }
+                if (surname1.matches("[A-Z][a-zA-Z]*")) {
+
+                    pst.setString(3, surnameTextField.getText());
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Incorrect format on Surname");
+                }
+                //---------------------------------------------------------------------------
+
+                //--------Taking selection from radiobutton------------------- 
+                if (maleRadioButton.isSelected()) {
+
+                    gender = "MALE";
+                } else if (femaleRadioButton.isSelected()) {
+
+                    gender = "FEMALE";
+
+                }
+
+                pst.setString(4, gender);
+                //--------------------------------------------------------------------------------------  
+                if (phone.matches("[0]\\d{9}")) {
+
+                    pst.setInt(5, Integer.parseInt(phoneTextField.getText()));
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Number must be 10 digit and start with 0 ");
+                }
+
+                if (mail.matches("^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$")) {
+
+                    pst.setString(6, emailTextField.getText());
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Enter the Correct format of email!! eg. jkm@gmail.com or 1234@jk.za.az");
+                }
+
+                //-----COMBOBOX selection-------------------------------- 
+                occ = occComboBox.getSelectedItem().toString();//converting the selected iemto toString
+                pst.setString(7, occ);
+                stat = statComboBox.getSelectedItem().toString();//converting the selected iemto toString
+                pst.setString(8, stat);
+
+                pst.executeUpdate();//executing e update
+                JOptionPane.showMessageDialog(this, "Insertion Succesfully");
+                DefaultTableModel mdel = (DefaultTableModel) dbTable.getModel();//getting table model
+                mdel.setRowCount(0);//emptying the rows in the table
+                show_user();//calling the show user again after emptying the table
 
             } else {
-                JOptionPane.showMessageDialog(null, "All registration numbers must be 7 digits and start with a 1 or 2");
-            }
+                JOptionPane.showMessageDialog(this, "User with the same Registration number is already existing in the DB");
 
-            if (name1.matches("[A-Z][a-zA-Z]*")) {
-
-                pst.setString(2, nameTextField.getText());
-
-            } else {
-                JOptionPane.showMessageDialog(null, "Incorrect format on Name");
-            }
-            if (surname1.matches("[A-Z][a-zA-Z]*")) {
-
-                pst.setString(3, surnameTextField.getText());
-
-            } else {
-                JOptionPane.showMessageDialog(null, "Incorrect format on Surname");
-            }
-            //---------------------------------------------------------------------------
-
-            //--------Taking selection from radiobutton------------------- 
-            if (maleRadioButton.isSelected()) {
-
-                gender = "MALE";
-            } else if (femaleRadioButton.isSelected()) {
-
-                gender = "FEMALE";
+                con.close();
 
             }
-
-            pst.setString(4, gender);
-            //--------------------------------------------------------------------------------------  
-            if (phone.matches("[0]\\d{9}")) {
-
-                pst.setInt(5, Integer.parseInt(phoneTextField.getText()));
-
-            } else {
-                JOptionPane.showMessageDialog(null, "Number must be 10 digit and start with 0 ");
-            }
-
-            if (mail.matches("^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$")) {
-
-                pst.setString(6, emailTextField.getText());
-
-            } else {
-                JOptionPane.showMessageDialog(null, "Enter the Correct format of email!! eg. jkm@gmail.com or 1234@jk.za.az");
-            }
-
-            //-----COMBOBOX selection-------------------------------- 
-            occ = occComboBox.getSelectedItem().toString();//converting the selected iemto toString
-            pst.setString(7, occ);
-            stat = statComboBox.getSelectedItem().toString();//converting the selected iemto toString
-            pst.setString(8, stat);
-
-            pst.executeUpdate();//executing e update
-            JOptionPane.showMessageDialog(this, "Insertion Succesfully");
-            DefaultTableModel mdel = (DefaultTableModel) dbTable.getModel();//getting table model
-            mdel.setRowCount(0);//emptying the rows in the table
-            show_user();//calling the show user again after emptying the table
-            
-            }
-            else{
-             JOptionPane.showMessageDialog(this, "User with the same Registration number is already existing in the DB"); 
-             
-             
-             
-             con.close();
-                
-            }
-
 
         } catch (Exception e) {
 
@@ -433,96 +428,90 @@ public class HomePage extends javax.swing.JFrame {
         String phone = phoneTextField.getText();
         String mail = emailTextField.getText();
         //---------------------------------------------------------------- 
-        
-        
+
         try {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user?useSS=false", "root", "Adolphhk07");//Establish the connection the DB
-            
-            String sql1 ="select * from userinfo where registNo=?";
-            
+            //---------Creating the condition before executing the update command---------------
+            String sql1 = "select * from userinfo where registNo=?";
+
             PreparedStatement pst1 = con.prepareStatement(sql1);
             pst1.setInt(1, Integer.parseInt(regTextField.getText()));//taking parameters from the registeer No textfield
             ResultSet rst = pst1.executeQuery();
-            
-            if(rst.next()){
- 
-            String sql = "update userinfo set name=?,surname=?, gender=?, phoneNo=?, email=?, occupation=?, status=? where registNo=? ;";//Creating the update sql commande
-            PreparedStatement pst = con.prepareStatement(sql);//statement
 
-            //----------Taking parameter from the textfield, combobox and radiobutton---------------
-            
+            if (rst.next()) {
 
-            if (name1.matches("[A-Z][a-zA-Z]*")) {
+                String sql = "update userinfo set name=?,surname=?, gender=?, phoneNo=?, email=?, occupation=?, status=? where registNo=? ;";//Creating the update sql commande
+                PreparedStatement pst = con.prepareStatement(sql);//statement
 
-                pst.setString(1, nameTextField.getText());
+                //----------Taking parameter from the textfield, combobox and radiobutton---------------
+                if (name1.matches("[A-Z][a-zA-Z]*")) {
+
+                    pst.setString(1, nameTextField.getText());
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Incorrect format on Name");
+                }
+                if (surname1.matches("[A-Z][a-zA-Z]*")) {
+
+                    pst.setString(2, surnameTextField.getText());
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Incorrect format on Surname");
+                }
+                //---------------------------------------------------------------------------
+
+                //--------Taking selection from radiobutton------------------- 
+                if (maleRadioButton.isSelected()) {
+
+                    gender = "MALE";
+                } else if (femaleRadioButton.isSelected()) {
+
+                    gender = "FEMALE";
+
+                }
+
+                pst.setString(3, gender);
+                //--------------------------------------------------------------------------------------  
+                if (phone.matches("[0]\\d{9}")) {
+
+                    pst.setInt(4, Integer.parseInt(phoneTextField.getText()));
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Phone Number must be 10 digit and start with 0 ");
+                }
+
+                if (mail.matches("^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$")) {
+
+                    pst.setString(5, emailTextField.getText());
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "Enter the Correct format of email!! eg. jkm@gmail.com or 1234@jk.za.az");
+                }
+
+                //-----COMBOBOX selection-------------------------------- 
+                occ = occComboBox.getSelectedItem().toString();//converting the selected iemto toString
+                pst.setString(6, occ);
+                stat = statComboBox.getSelectedItem().toString();//converting the selected iemto toString
+                pst.setString(7, stat);
+
+                if (regis.matches("[1-2]\\d{6}")) {
+
+                    pst.setInt(8, Integer.parseInt(regTextField.getText()));
+
+                } else {
+                    JOptionPane.showMessageDialog(null, "All registration numbers must be 7 digits and start with a 1 or 2");
+                }
+                //------------------------------------------------------------------  
+
+                pst.executeUpdate();
+                JOptionPane.showMessageDialog(this, "Updated Succesfully");
+                DefaultTableModel mdel = (DefaultTableModel) dbTable.getModel();//getting table model
+                mdel.setRowCount(0);//emptying the rows in the table
+                show_user();//calling the show user again after emptying the table
 
             } else {
-                JOptionPane.showMessageDialog(null, "Incorrect format on Name");
-            }
-            if (surname1.matches("[A-Z][a-zA-Z]*")) {
-
-                pst.setString(2, surnameTextField.getText());
-
-            } else {
-                JOptionPane.showMessageDialog(null, "Incorrect format on Surname");
-            }
-            //---------------------------------------------------------------------------
-
-            //--------Taking selection from radiobutton------------------- 
-            if (maleRadioButton.isSelected()) {
-
-                gender = "MALE";
-            } else if (femaleRadioButton.isSelected()) {
-
-                gender = "FEMALE";
-
-            }
-
-            pst.setString(3, gender);
-            //--------------------------------------------------------------------------------------  
-            if (phone.matches("[0]\\d{9}")) {
-
-                pst.setInt(4, Integer.parseInt(phoneTextField.getText()));
-
-            } else {
-                JOptionPane.showMessageDialog(null, "Phone Number must be 10 digit and start with 0 ");
-            }
-
-            if (mail.matches("^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$")) {
-
-                pst.setString(5, emailTextField.getText());
-
-            } else {
-                JOptionPane.showMessageDialog(null, "Enter the Correct format of email!! eg. jkm@gmail.com or 1234@jk.za.az");
-            }
-
-            //-----COMBOBOX selection-------------------------------- 
-            occ = occComboBox.getSelectedItem().toString();//converting the selected iemto toString
-            pst.setString(6, occ);
-            stat = statComboBox.getSelectedItem().toString();//converting the selected iemto toString
-            pst.setString(7, stat);
-            
-            if (regis.matches("[1-2]\\d{6}")) {
-
-                pst.setInt(8, Integer.parseInt(regTextField.getText()));
-
-            } else {
-                JOptionPane.showMessageDialog(null, "All registration numbers must be 7 digits and start with a 1 or 2");
-            }
-            //------------------------------------------------------------------  
-
-            pst.executeUpdate();
-            JOptionPane.showMessageDialog(this, "Updated Succesfully");
-            DefaultTableModel mdel = (DefaultTableModel) dbTable.getModel();//getting table model
-            mdel.setRowCount(0);//emptying the rows in the table
-            show_user();//calling the show user again after emptying the table
-            
-            
-            }
-            
-            else{
                 JOptionPane.showMessageDialog(this, "No match with the registration number provided");
-               con.close(); 
+                con.close();
             }
 
         } catch (SQLException ex) {
@@ -537,30 +526,32 @@ public class HomePage extends javax.swing.JFrame {
 
         try {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user?useSS=false", "root", "Adolphhk07");//creating the connection to the DB
-           
-            String sql1 ="select * from userinfo where registNo=?";
-            
-            PreparedStatement pst1 = con.prepareStatement(sql1);
+
+            //---------Creating the condition before executing the delete command---------------
+            String sql1 = "select * from userinfo where registNo=?";//creating the sql command
+
+            PreparedStatement pst1 = con.prepareStatement(sql1);//
             pst1.setInt(1, Integer.parseInt(regTextField.getText()));//taking parameters from the registeer No textfield
             ResultSet rst = pst1.executeQuery();
-            if(rst.next()){
+            //--Start if statement-------
+            if (rst.next()) {
                 String sql = "delete from userinfo where registNo=?;";//creating the delete sql command
-            
-            PreparedStatement pst = con.prepareStatement(sql);//statement
 
-           pst.setInt(1, Integer.parseInt(regTextField.getText()));//taking parameters from the registeer No textfield
-            pst.executeUpdate();//executing the update
-            JOptionPane.showMessageDialog(this, "Deleted Succesfully");
-           DefaultTableModel mdel = (DefaultTableModel) dbTable.getModel();//getting table model
-           mdel.setRowCount(0);//emptying the rows in the table
-           show_user();//calling the show user again after emptying the table
-            }
-            else{
-             JOptionPane.showMessageDialog(this, "This registration number does not exist");
-             
-             con.close();
-                
-            }
+                PreparedStatement pst = con.prepareStatement(sql);//statement
+
+                pst.setInt(1, Integer.parseInt(regTextField.getText()));//taking parameters from the registeer No textfield
+                pst.executeUpdate();//executing the update
+                JOptionPane.showMessageDialog(this, "Deleted Succesfully");
+                DefaultTableModel mdel = (DefaultTableModel) dbTable.getModel();//getting table model
+                mdel.setRowCount(0);//emptying the rows in the table
+                show_user();//calling the show user again after emptying the table
+            }//end if
+            else {
+                JOptionPane.showMessageDialog(this, "This registration number does not exist");//error message
+
+                con.close();
+
+            }//end else
 
         } catch (SQLException ex) {
             Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package codingchallenge;
 
 /**
@@ -10,9 +5,9 @@ package codingchallenge;
  * @author for sale pc
  */
 public class User {
-    
-    int reg, phone;
-    String name, surname, gender, email, occu, status;
+
+    int reg, phone;//declaring integer variable
+    String name, surname, gender, email, occu, status;//declaring String variablle
 
     /**
      *
@@ -25,9 +20,10 @@ public class User {
      * @param occu
      * @param status
      */
-    public User(int reg,  String name, String surname, String gender, int phone, String email, String occu, String status) {
+    //------------------Constractor----------------------
+    public User(int reg, String name, String surname, String gender, int phone, String email, String occu, String status) {
         this.reg = reg;
-        
+
         this.name = name;
         this.surname = surname;
         this.gender = gender;
@@ -35,13 +31,12 @@ public class User {
         this.email = email;
         this.occu = occu;
         this.status = status;
-    }
+    }// End constractor
+//------Creating getter-------------------
 
     public int getReg() {
         return reg;
     }
-
-   
 
     public String getName() {
         return name;
@@ -54,9 +49,11 @@ public class User {
     public String getGender() {
         return gender;
     }
-     public int getPhone() {
+
+    public int getPhone() {
         return phone;
     }
+
     public String getEmail() {
         return email;
     }
@@ -68,7 +65,5 @@ public class User {
     public String getStatus() {
         return status;
     }
-    
-    
-    
-}
+//---------------------------------------------------------------------
+}//end user class
