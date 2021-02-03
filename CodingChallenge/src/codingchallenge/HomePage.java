@@ -1,4 +1,3 @@
-
 package codingchallenge;
 
 import static java.lang.System.out;
@@ -19,12 +18,12 @@ import javax.swing.table.DefaultTableModel;
  * @author for sale pc
  */
 public class HomePage extends javax.swing.JFrame {
-    
+
     //vairable declaration
     String gender;//used for radiobutton
     String occ;//use for combobox
     String stat;//used for combox
-    
+
     /**
      *
      */
@@ -32,62 +31,59 @@ public class HomePage extends javax.swing.JFrame {
         initComponents();
         show_user();//calling the show user to show data in the table
     }
+
     //-------------Creating the Arraylist ---------------------------------
-    public ArrayList<User>userList(){
-        
+    public ArrayList<User> userList() {
+
         ArrayList<User> userList = new ArrayList<>();
         try {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user?useSS=false", "root", "Adolphhk07");//Establish the connection the DB  
-            
+
             String sql = "select * from userinfo";// ceating sql command to select data
-            
-            Statement stm  = con.createStatement();//creating the stament
+
+            Statement stm = con.createStatement();//creating the stament
             ResultSet rst = stm.executeQuery(sql);//executing the stmt
-            
+
             User user;
             //-------creating the while loop  ---------------
-            while(rst.next()){
-                user = new User(rst.getInt("registNo"),  rst.getString("name"), rst.getString("surname"),rst.getString("gender"), rst.getInt("phoneNo"),rst.getString("email"), rst.getString("occupation"), rst.getString("status"));//parametrs of the table
+            while (rst.next()) {
+                user = new User(rst.getInt("registNo"), rst.getString("name"), rst.getString("surname"), rst.getString("gender"), rst.getInt("phoneNo"), rst.getString("email"), rst.getString("occupation"), rst.getString("status"));//parametrs of the table
                 userList.add(user);//adding user to the user list
-                
+
             }//end while
-            
-            
+
         } catch (SQLException ex) {
             Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-        
+
         return userList;
-        
-        
+
     }//end ArrayList
-    
+
     //---------showing user in the table---------------
-    public void show_user(){
-        
+    public void show_user() {
+
         ArrayList<User> list = userList();
-       DefaultTableModel model = (DefaultTableModel)dbTable.getModel();
-       Object[] row = new Object[8];
-       //-------for statement -------------------
-       for(int i=0; i<list.size(); i++){
-          
-           //-------Adding each data to his row----------
-           row[0] = list.get(i).getReg();
-           row[1] = list.get(i).getName();
-           row[2] = list.get(i).getSurname();
-           row[3] = list.get(i).getGender();
-           row[4] = list.get(i).getPhone();
-           row[5] = list.get(i).getEmail();
-           row[6] = list.get(i).getOccu();
-           row[7] = list.get(i).getStatus();
-           model.addRow(row);
-           
-       }//end for
-        
-        
+        DefaultTableModel model = (DefaultTableModel) dbTable.getModel();
+        Object[] row = new Object[8];
+        //-------for statement -------------------
+        for (int i = 0; i < list.size(); i++) {
+
+            //-------Adding each data to his row----------
+            row[0] = list.get(i).getReg();
+            row[1] = list.get(i).getName();
+            row[2] = list.get(i).getSurname();
+            row[3] = list.get(i).getGender();
+            row[4] = list.get(i).getPhone();
+            row[5] = list.get(i).getEmail();
+            row[6] = list.get(i).getOccu();
+            row[7] = list.get(i).getStatus();
+            model.addRow(row);
+
+        }//end for
+
     }// end show_user
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -305,20 +301,20 @@ public class HomePage extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void addButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addButtonActionPerformed
-       //-------------Declare variable use for REGEX-----------------------
+        //-------------Declare variable use for REGEX-----------------------
         String regis = regTextField.getText();
         String name1 = nameTextField.getText();
         String surname1 = nameTextField.getText();
         String phone = phoneTextField.getText();
         String mail = emailTextField.getText();
-      //---------------------------------------------------------------- 
-        
+        //---------------------------------------------------------------- 
+
         try {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user?useSS=false", "root", "Adolphhk07");//Establish the connection the DB
 
             String sql = "insert into userinfo(registNo, name, surname, gender, phoneNo, email, occupation, status) values (?,?,?,?,?,?,?,?);";//Creating the sql commande
             PreparedStatement pst = con.prepareStatement(sql);//statement
-      //----------------REGEX condition  and Taking parameter from the textfield----------------------------------------      
+            //----------------REGEX condition  and Taking parameter from the textfield----------------------------------------      
             if (regis.matches("[1-2]\\d{6}")) {
 
                 pst.setInt(1, Integer.parseInt(regTextField.getText()));
@@ -336,78 +332,66 @@ public class HomePage extends javax.swing.JFrame {
             }
             if (surname1.matches("[A-Z][a-zA-Z]*")) {
 
-              pst.setString(3, surnameTextField.getText());
+                pst.setString(3, surnameTextField.getText());
 
             } else {
                 JOptionPane.showMessageDialog(null, "Incorrect format on Surname");
             }
-         //---------------------------------------------------------------------------
-         
-         
-          //--------Taking selection from radiobutton------------------- 
-           if(maleRadioButton.isSelected()){
-               
-               gender = "MALE";
-           }
-           else if (femaleRadioButton.isSelected()){
-               
-               gender = "FEMALE";
-               
-           }
-            
-          pst.setString(4,gender ); 
-        //--------------------------------------------------------------------------------------  
-           if (phone.matches("[0]\\d{9}")) {
-                 
-                 pst.setInt(5, Integer.parseInt(phoneTextField.getText()) );
+            //---------------------------------------------------------------------------
 
-             } else {
-                 JOptionPane.showMessageDialog(null, "Number must be 10 digit and start with 0 ");
-             }
-          
-          
-             if (mail.matches("^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$")) {
-                 
-                 pst.setString(6, emailTextField.getText());
+            //--------Taking selection from radiobutton------------------- 
+            if (maleRadioButton.isSelected()) {
 
-             } else {
-                 JOptionPane.showMessageDialog(null, "Enter the Correct format of email!! eg. jkm@gmail.com or 1234@jk.za.az");
-             }
-          
-         //-----COMBOBOX selection-------------------------------- 
-          occ = occComboBox.getSelectedItem().toString();//converting the selected iemto toString
-          pst.setString(7,occ);
-          stat = statComboBox.getSelectedItem().toString();//converting the selected iemto toString
-          pst.setString(8,stat);
-          
-          pst.executeUpdate();
-         regTextField.setText("");
-        nameTextField.setText("");
-        surnameTextField.setText("");
-        buttonGroup1.clearSelection();
-        phoneTextField.setText("");
-        emailTextField.setText("");
-        occComboBox.setSelectedIndex(0);
-        statComboBox.setSelectedIndex(0);
-          DefaultTableModel mdel = (DefaultTableModel)dbTable.getModel();
-          mdel.setRowCount(0);//emptying the rows in the table
-          show_user();//calling the show user again after emptying the table
-          JOptionPane.showMessageDialog(this,"Insertion Succesfully");
-          con.close();
+                gender = "MALE";
+            } else if (femaleRadioButton.isSelected()) {
+
+                gender = "FEMALE";
+
+            }
+
+            pst.setString(4, gender);
+            //--------------------------------------------------------------------------------------  
+            if (phone.matches("[0]\\d{9}")) {
+
+                pst.setInt(5, Integer.parseInt(phoneTextField.getText()));
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Number must be 10 digit and start with 0 ");
+            }
+
+            if (mail.matches("^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$")) {
+
+                pst.setString(6, emailTextField.getText());
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Enter the Correct format of email!! eg. jkm@gmail.com or 1234@jk.za.az");
+            }
+
+            //-----COMBOBOX selection-------------------------------- 
+            occ = occComboBox.getSelectedItem().toString();//converting the selected iemto toString
+            pst.setString(7, occ);
+            stat = statComboBox.getSelectedItem().toString();//converting the selected iemto toString
+            pst.setString(8, stat);
+
+            pst.executeUpdate();//executing e update
+            JOptionPane.showMessageDialog(this, "Insertion Succesfully");
+            DefaultTableModel mdel = (DefaultTableModel) dbTable.getModel();//getting table model
+            mdel.setRowCount(0);//emptying the rows in the table
+            show_user();//calling the show user again after emptying the table
             
-            
-        } catch(Exception e){
-            
+            con.close();
+
+        } catch (Exception e) {
+
             JOptionPane.showMessageDialog(null, e);
         }
-        
-        
-        
+
+
     }//GEN-LAST:event_addButtonActionPerformed
-      //end  addButtonActionPerformed
-    
+    //end  addButtonActionPerformed
+
     private void newButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_newButtonActionPerformed
-      
+
         //-----------Emptying the textfield-----------
         regTextField.setText("");
         nameTextField.setText("");
@@ -417,76 +401,82 @@ public class HomePage extends javax.swing.JFrame {
         emailTextField.setText("");
         occComboBox.setSelectedIndex(0);
         statComboBox.setSelectedIndex(0);
-        
+
         //----------------------------------------
     }//GEN-LAST:event_newButtonActionPerformed
-         //end newButtonActionPerformed
+    //end newButtonActionPerformed
+
     /**
-     * 
-     * @param evt 
+     *
+     * @param evt
      */
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
-        
+
         try {
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user?useSS=false","root","Adolphhk07");//Establish the connection the DB
-            
-            String sql= "update userinfo set name=?,surname=?, gender=?, phoneNo=?, email=?, occupation=?, status=? where registNo=? ;";//Creating the update sql commande
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user?useSS=false", "root", "Adolphhk07");//Establish the connection the DB
+
+            String sql = "update userinfo set name=?,surname=?, gender=?, phoneNo=?, email=?, occupation=?, status=? where registNo=? ;";//Creating the update sql commande
             PreparedStatement pst = con.prepareStatement(sql);//statement
-            
+
             //----------Taking parameter from the textfield, combobox and radiobutton---------------
             pst.setString(1, nameTextField.getText());
-            pst.setString(2,surnameTextField.getText() );
-            if(maleRadioButton.isSelected()){
-               
-               gender = "MALE";
-           }
-           else if (femaleRadioButton.isSelected()){
-               
-               gender = "FEMALE";
-               
-           }
-            
-          pst.setString(3,gender ); 
-          pst.setInt(4, Integer.parseInt(phoneTextField.getText()) );
-          pst.setString(5,emailTextField.getText());
-          
-          occ = occComboBox.getSelectedItem().toString();
-          pst.setString(6,occ);
-          stat = statComboBox.getSelectedItem().toString();
-          pst.setString(7,stat);
-          pst.setInt(8, Integer.parseInt(regTextField.getText()) );
-        //------------------------------------------------------------------  
-          
-          pst.executeUpdate();
-          JOptionPane.showMessageDialog(this,"Updated Succesfully");
-           con.close(); 
-           
+            pst.setString(2, surnameTextField.getText());
+            if (maleRadioButton.isSelected()) {
+
+                gender = "MALE";
+            } else if (femaleRadioButton.isSelected()) {
+
+                gender = "FEMALE";
+
+            }
+
+            pst.setString(3, gender);
+            pst.setInt(4, Integer.parseInt(phoneTextField.getText()));
+            pst.setString(5, emailTextField.getText());
+
+            occ = occComboBox.getSelectedItem().toString();
+            pst.setString(6, occ);
+            stat = statComboBox.getSelectedItem().toString();
+            pst.setString(7, stat);
+            pst.setInt(8, Integer.parseInt(regTextField.getText()));
+            //------------------------------------------------------------------  
+
+            pst.executeUpdate();
+            JOptionPane.showMessageDialog(this, "Updated Succesfully");
+            DefaultTableModel mdel = (DefaultTableModel) dbTable.getModel();//getting table model
+            mdel.setRowCount(0);//emptying the rows in the table
+            show_user();//calling the show user again after emptying the table
+            con.close();
+
         } catch (SQLException ex) {
             Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
+
+
     }//GEN-LAST:event_updateButtonActionPerformed
-            //end updateButtonActionPerformed
-    
+    //end updateButtonActionPerformed
+
     private void deleteButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_deleteButtonActionPerformed
-    
+
         try {
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user?useSS=false","root","Adolphhk07");//creating the connection to the DB
-            
-            String sql = "delete from userinfo where registNo=? ;";//creating the delete sql command
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user?useSS=false", "root", "Adolphhk07");//creating the connection to the DB
+            //int row = dbTable.getSelectedRow();
+            //String reg = (dbTable.getModel().getValueAt(row, 0).toString());
+            String sql = "delete from userinfo where registNo=?;";//creating the delete sql command
             PreparedStatement pst = con.prepareStatement(sql);//statement
-            
-            pst.setString(1, nameTextField.getText());//taking parameters from the registeer No textfield
-            pst.executeUpdate();//execute the update
-          JOptionPane.showMessageDialog(this,"Deleted Succesfully");
-          con.close();   
+
+           // pst.setString(1, nameTextField.getText());//taking parameters from the registeer No textfield
+            pst.executeUpdate();//executing the update
+            JOptionPane.showMessageDialog(this, "Deleted Succesfully");
+            DefaultTableModel mdel = (DefaultTableModel) dbTable.getModel();//getting table model
+            mdel.setRowCount(0);//emptying the rows in the table
+            show_user();//calling the show user again after emptying the table
+            con.close();
         } catch (SQLException ex) {
             Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-        
+
+
     }//GEN-LAST:event_deleteButtonActionPerformed
 
     private void maleRadioButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_maleRadioButtonActionPerformed
