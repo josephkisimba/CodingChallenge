@@ -209,7 +209,7 @@ public class HomePage extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(phoneLabel)
@@ -223,29 +223,28 @@ public class HomePage extends javax.swing.JFrame {
                             .addComponent(nameLabel)
                             .addComponent(surnameLabel)
                             .addComponent(genderLabel))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGap(62, 62, 62)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(62, 62, 62)
+                                .addComponent(updateButton)
+                                .addGap(31, 31, 31)
+                                .addComponent(deleteButton))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(nameTextField, javax.swing.GroupLayout.Alignment.TRAILING)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(maleRadioButton)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(femaleRadioButton))
                                     .addComponent(surnameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
-                                    .addComponent(nameTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
                                     .addComponent(emailTextField)
                                     .addComponent(phoneTextField, javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addComponent(occComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(statComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(75, 75, 75)
-                                .addComponent(updateButton)
-                                .addGap(18, 18, 18)
-                                .addComponent(deleteButton))))
+                                    .addComponent(statComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(regLabel)
-                        .addGap(171, 171, 171)
-                        .addComponent(regTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(regTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE))
         );
@@ -438,29 +437,31 @@ public class HomePage extends javax.swing.JFrame {
         
         try {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user?useSS=false", "root", "Adolphhk07");//Establish the connection the DB
-
+            
+            String sql1 ="select * from userinfo where registNo=?";
+            
+            PreparedStatement pst1 = con.prepareStatement(sql1);
+            pst1.setInt(1, Integer.parseInt(regTextField.getText()));//taking parameters from the registeer No textfield
+            ResultSet rst = pst1.executeQuery();
+            
+            if(rst.next()){
+ 
             String sql = "update userinfo set name=?,surname=?, gender=?, phoneNo=?, email=?, occupation=?, status=? where registNo=? ;";//Creating the update sql commande
             PreparedStatement pst = con.prepareStatement(sql);//statement
 
             //----------Taking parameter from the textfield, combobox and radiobutton---------------
-            if (regis.matches("[1-2]\\d{6}")) {
-
-                pst.setInt(1, Integer.parseInt(regTextField.getText()));
-
-            } else {
-                JOptionPane.showMessageDialog(null, "All registration numbers must be 7 digits and start with a 1 or 2");
-            }
+            
 
             if (name1.matches("[A-Z][a-zA-Z]*")) {
 
-                pst.setString(2, nameTextField.getText());
+                pst.setString(1, nameTextField.getText());
 
             } else {
                 JOptionPane.showMessageDialog(null, "Incorrect format on Name");
             }
             if (surname1.matches("[A-Z][a-zA-Z]*")) {
 
-                pst.setString(3, surnameTextField.getText());
+                pst.setString(2, surnameTextField.getText());
 
             } else {
                 JOptionPane.showMessageDialog(null, "Incorrect format on Surname");
@@ -477,11 +478,11 @@ public class HomePage extends javax.swing.JFrame {
 
             }
 
-            pst.setString(4, gender);
+            pst.setString(3, gender);
             //--------------------------------------------------------------------------------------  
             if (phone.matches("[0]\\d{9}")) {
 
-                pst.setInt(5, Integer.parseInt(phoneTextField.getText()));
+                pst.setInt(4, Integer.parseInt(phoneTextField.getText()));
 
             } else {
                 JOptionPane.showMessageDialog(null, "Phone Number must be 10 digit and start with 0 ");
@@ -489,7 +490,7 @@ public class HomePage extends javax.swing.JFrame {
 
             if (mail.matches("^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$")) {
 
-                pst.setString(6, emailTextField.getText());
+                pst.setString(5, emailTextField.getText());
 
             } else {
                 JOptionPane.showMessageDialog(null, "Enter the Correct format of email!! eg. jkm@gmail.com or 1234@jk.za.az");
@@ -497,9 +498,17 @@ public class HomePage extends javax.swing.JFrame {
 
             //-----COMBOBOX selection-------------------------------- 
             occ = occComboBox.getSelectedItem().toString();//converting the selected iemto toString
-            pst.setString(7, occ);
+            pst.setString(6, occ);
             stat = statComboBox.getSelectedItem().toString();//converting the selected iemto toString
-            pst.setString(8, stat);
+            pst.setString(7, stat);
+            
+            if (regis.matches("[1-2]\\d{6}")) {
+
+                pst.setInt(8, Integer.parseInt(regTextField.getText()));
+
+            } else {
+                JOptionPane.showMessageDialog(null, "All registration numbers must be 7 digits and start with a 1 or 2");
+            }
             //------------------------------------------------------------------  
 
             pst.executeUpdate();
@@ -507,7 +516,14 @@ public class HomePage extends javax.swing.JFrame {
             DefaultTableModel mdel = (DefaultTableModel) dbTable.getModel();//getting table model
             mdel.setRowCount(0);//emptying the rows in the table
             show_user();//calling the show user again after emptying the table
-            con.close();
+            
+            
+            }
+            
+            else{
+                JOptionPane.showMessageDialog(this, "No match with the registration number provided");
+               con.close(); 
+            }
 
         } catch (SQLException ex) {
             Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
@@ -540,7 +556,7 @@ public class HomePage extends javax.swing.JFrame {
            show_user();//calling the show user again after emptying the table
             }
             else{
-             JOptionPane.showMessageDialog(this, "This register number is not recorded");
+             JOptionPane.showMessageDialog(this, "This registration number does not exist");
              
              con.close();
                 
