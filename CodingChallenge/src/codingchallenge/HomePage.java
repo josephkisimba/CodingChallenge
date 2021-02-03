@@ -311,7 +311,14 @@ public class HomePage extends javax.swing.JFrame {
 
         try {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user?useSS=false", "root", "Adolphhk07");//Establish the connection the DB
-
+            
+            String sql1 ="select * from userinfo where registNo=?";
+            
+            PreparedStatement pst1 = con.prepareStatement(sql1);
+            pst1.setInt(1, Integer.parseInt(regTextField.getText()));//taking parameters from the registeer No textfield
+            ResultSet rst = pst1.executeQuery();
+            
+            if(!rst.next()){
             String sql = "insert into userinfo(registNo, name, surname, gender, phoneNo, email, occupation, status) values (?,?,?,?,?,?,?,?);";//Creating the sql commande
             PreparedStatement pst = con.prepareStatement(sql);//statement
             //----------------REGEX condition  and Taking parameter from the textfield----------------------------------------      
@@ -379,7 +386,16 @@ public class HomePage extends javax.swing.JFrame {
             mdel.setRowCount(0);//emptying the rows in the table
             show_user();//calling the show user again after emptying the table
             
-            con.close();
+            }
+            else{
+             JOptionPane.showMessageDialog(this, "User with the same Registration number is already existing in the DB"); 
+             
+             
+             
+             con.close();
+                
+            }
+
 
         } catch (Exception e) {
 
@@ -411,7 +427,15 @@ public class HomePage extends javax.swing.JFrame {
      * @param evt
      */
     private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
-
+        //-------------Declare variable use for REGEX-----------------------
+        String regis = regTextField.getText();
+        String name1 = nameTextField.getText();
+        String surname1 = nameTextField.getText();
+        String phone = phoneTextField.getText();
+        String mail = emailTextField.getText();
+        //---------------------------------------------------------------- 
+        
+        
         try {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user?useSS=false", "root", "Adolphhk07");//Establish the connection the DB
 
@@ -419,8 +443,31 @@ public class HomePage extends javax.swing.JFrame {
             PreparedStatement pst = con.prepareStatement(sql);//statement
 
             //----------Taking parameter from the textfield, combobox and radiobutton---------------
-            pst.setString(1, nameTextField.getText());
-            pst.setString(2, surnameTextField.getText());
+            if (regis.matches("[1-2]\\d{6}")) {
+
+                pst.setInt(1, Integer.parseInt(regTextField.getText()));
+
+            } else {
+                JOptionPane.showMessageDialog(null, "All registration numbers must be 7 digits and start with a 1 or 2");
+            }
+
+            if (name1.matches("[A-Z][a-zA-Z]*")) {
+
+                pst.setString(2, nameTextField.getText());
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Incorrect format on Name");
+            }
+            if (surname1.matches("[A-Z][a-zA-Z]*")) {
+
+                pst.setString(3, surnameTextField.getText());
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Incorrect format on Surname");
+            }
+            //---------------------------------------------------------------------------
+
+            //--------Taking selection from radiobutton------------------- 
             if (maleRadioButton.isSelected()) {
 
                 gender = "MALE";
@@ -430,15 +477,29 @@ public class HomePage extends javax.swing.JFrame {
 
             }
 
-            pst.setString(3, gender);
-            pst.setInt(4, Integer.parseInt(phoneTextField.getText()));
-            pst.setString(5, emailTextField.getText());
+            pst.setString(4, gender);
+            //--------------------------------------------------------------------------------------  
+            if (phone.matches("[0]\\d{9}")) {
 
-            occ = occComboBox.getSelectedItem().toString();
-            pst.setString(6, occ);
-            stat = statComboBox.getSelectedItem().toString();
-            pst.setString(7, stat);
-            pst.setInt(8, Integer.parseInt(regTextField.getText()));
+                pst.setInt(5, Integer.parseInt(phoneTextField.getText()));
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Phone Number must be 10 digit and start with 0 ");
+            }
+
+            if (mail.matches("^[\\w!#$%&'*+/=?`{|}~^-]+(?:\\.[\\w!#$%&'*+/=?`{|}~^-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$")) {
+
+                pst.setString(6, emailTextField.getText());
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Enter the Correct format of email!! eg. jkm@gmail.com or 1234@jk.za.az");
+            }
+
+            //-----COMBOBOX selection-------------------------------- 
+            occ = occComboBox.getSelectedItem().toString();//converting the selected iemto toString
+            pst.setString(7, occ);
+            stat = statComboBox.getSelectedItem().toString();//converting the selected iemto toString
+            pst.setString(8, stat);
             //------------------------------------------------------------------  
 
             pst.executeUpdate();
@@ -460,18 +521,31 @@ public class HomePage extends javax.swing.JFrame {
 
         try {
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/user?useSS=false", "root", "Adolphhk07");//creating the connection to the DB
-            //int row = dbTable.getSelectedRow();
-            //String reg = (dbTable.getModel().getValueAt(row, 0).toString());
-            String sql = "delete from userinfo where registNo=?;";//creating the delete sql command
+           
+            String sql1 ="select * from userinfo where registNo=?";
+            
+            PreparedStatement pst1 = con.prepareStatement(sql1);
+            pst1.setInt(1, Integer.parseInt(regTextField.getText()));//taking parameters from the registeer No textfield
+            ResultSet rst = pst1.executeQuery();
+            if(rst.next()){
+                String sql = "delete from userinfo where registNo=?;";//creating the delete sql command
+            
             PreparedStatement pst = con.prepareStatement(sql);//statement
 
-           // pst.setString(1, nameTextField.getText());//taking parameters from the registeer No textfield
+           pst.setInt(1, Integer.parseInt(regTextField.getText()));//taking parameters from the registeer No textfield
             pst.executeUpdate();//executing the update
             JOptionPane.showMessageDialog(this, "Deleted Succesfully");
-            DefaultTableModel mdel = (DefaultTableModel) dbTable.getModel();//getting table model
-            mdel.setRowCount(0);//emptying the rows in the table
-            show_user();//calling the show user again after emptying the table
-            con.close();
+           DefaultTableModel mdel = (DefaultTableModel) dbTable.getModel();//getting table model
+           mdel.setRowCount(0);//emptying the rows in the table
+           show_user();//calling the show user again after emptying the table
+            }
+            else{
+             JOptionPane.showMessageDialog(this, "This register number is not recorded");
+             
+             con.close();
+                
+            }
+
         } catch (SQLException ex) {
             Logger.getLogger(HomePage.class.getName()).log(Level.SEVERE, null, ex);
         }
